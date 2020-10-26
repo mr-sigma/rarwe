@@ -1,12 +1,10 @@
 export default class Song {
-  title = '';
-  rating = 0;
-  band = '';
-
-  constructor({ title, rating, band }) {
+  constructor({ id, title, rating, band }, relationships={}) {
+    this.id = id
     this.title = title;
-    this.rating = rating;
+    this.rating = rating ?? 0;
     this.band = band;
+    this.relationships = relationships
   }
 }
 
