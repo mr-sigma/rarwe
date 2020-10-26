@@ -1,5 +1,6 @@
 import Service from '@ember/service';
 import Band from 'rarwe/models/band';
+import Song from 'rarwe/models/song';
 import { tracked } from 'tracked-built-ins';
 
 function extractRelationships(object) {
@@ -20,18 +21,50 @@ export default class CatalogService extends Service {
     this.storage.songs = tracked([]);
   }
 
-  async fetchAll() {
-    let response = await fetch('/bands');
-    let json = await response.json();
-    for(let item of json.data) {
-      let { id, attributes, relationships } = item;
-      let rels = extractRelationships(relationships);
-      let record = new Band({ id, ...attributes }, rels)
+  async fetchAll(type) {
+    if(type === 'bands') {
+      let response = await fetch('/bands');
+      let json = await response.json();
 
-      this.add('band', record);
+      this.loadAll(json);
+
+      return this.bands
+    }
+    if(type === 'songs') {
+      let response = await fetch('/songs');
+      let json = await response.json();
+
+      this.loadAll(json)
+
+      return this.songs
+    }
+  }
+
+  loadAll(json) {
+    let records = [];
+    for(let item of json.data) {
+      records.push(this._loadResource(item));
     }
 
-    return this.bands
+    return records;
+  }
+
+  _loadResource(data) {
+    let record;
+    let { id, type, attributes, relationships } = data;
+
+    if(type === 'bands') {
+      let rels = extractRelationships(relationships);
+      record = new Band({ id, ...attributes }, rels);
+      this.add('band', record)
+    }
+    if(type === 'songs') {
+      let rels = extractRelationships(relationships);
+      record = new Song({ id, ...attributes }, rels);
+      this.add('song', record);
+    }
+
+    return record;
   }
 
   add(type, record) {
