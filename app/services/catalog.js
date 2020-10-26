@@ -129,8 +129,11 @@ export default class CatalogService extends Service {
 
   add(type, record) {
     let collection = type === 'band' ? this.storage.bands : this.storage.songs;
+    let recordIds = collection.map(record => record.id);
 
-    collection.push(record);
+    if(!recordIds.includes(record.id)) {
+      collection.push(record);
+    }
   }
 
   get bands() {
