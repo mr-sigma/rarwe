@@ -49,6 +49,10 @@ export default class CatalogService extends Service {
     return records;
   }
 
+  load(response) {
+    return this._loadResource(response.data);
+  }
+
   _loadResource(data) {
     let record;
     let { id, type, attributes, relationships } = data;
@@ -65,6 +69,28 @@ export default class CatalogService extends Service {
     }
 
     return record;
+  }
+
+  async create(type, attributes, relationships={}) {
+    let payload = {
+      data: {
+        type: type === 'band' ? 'bands' : 'songs',
+        attributes,
+        relationships
+      }
+    };
+
+    let response = await fetch(type === 'band' ? '/bands' : '/songs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'appliaction/vnd.api+json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    let json = await response.json();
+
+    return this.load(json);
   }
 
   add(type, record) {
