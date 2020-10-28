@@ -1,7 +1,7 @@
-{{#if @model.songs.length}}
+{{#if this.sortedSongs.length}}
   <ul>
-    {{#each @model.songs as |song|}}
-      <li class="mb-2">
+    {{#each this.sortedSongs as |song|}}
+      <li class="mb-2" data-test-rr="song-list-item">
         {{song.title}}
         <span class="float-right">
           <StarRating
