@@ -24,14 +24,14 @@ module('Acceptance | Bands', function(hooks) {
     this.server.create('band', { name: 'Royal Blood' });
 
     await visit('/');
-    await click('a[href="/bands/new"]');
-    await fillIn('input', 'Caspian');
-    await click('button');
-    await waitFor('p.text-center');
+    await click('[data-test-rr="new-band-button"]');
+    await fillIn('[data-test-rr="new-band-name"]', 'Caspian');
+    await click('[data-test-rr="save-band-button"]');
+    await waitFor('[data-test-rr="no-songs-text"]');
 
-    let bandLinks = document.querySelectorAll('.mb-2 > a');
+    let bandLinks = document.querySelectorAll('[data-test-rr="band-link"]');
     assert.equal(bandLinks.length, 2, 'All band links are rendered', 'A new band is rendered');
     assert.ok(bandLinks[1].textContent.includes('Caspian'), 'The new band link is rendered as the last item');
-    assert.ok(document.querySelector('.border-b-4.border-purple-400').textContent.includes('Songs'), 'The Songs tab is active');
+    assert.ok(document.querySelector('[data-test-rr="songs-nav-item"]').textContent.includes('Songs'), 'The Songs tab is active');
   });
 });
