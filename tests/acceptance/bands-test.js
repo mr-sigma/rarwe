@@ -1,7 +1,8 @@
 import { module, test } from 'qunit';
-import { visit, click, fillIn, waitFor } from '@ember/test-helpers';
+import { visit, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+import { createBand } from 'rarwe/tests/helpers/custom-helpers';
 
 module('Acceptance | Bands', function(hooks) {
   setupApplicationTest(hooks);
@@ -23,9 +24,7 @@ module('Acceptance | Bands', function(hooks) {
     this.server.create('band', { name: 'Royal Blood' });
 
     await visit('/');
-    await click('[data-test-rr="new-band-button"]');
-    await fillIn('[data-test-rr="new-band-name"]', 'Caspian');
-    await click('[data-test-rr="save-band-button"]');
+    await createBand('Caspian');
     await waitFor('[data-test-rr="no-songs-text"]');
 
     assert.dom('[data-test-rr="band-list-item"]').exists({ count: 2 }, 'A new band link is rendered');
