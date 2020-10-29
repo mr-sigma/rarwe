@@ -1,11 +1,10 @@
 {{#if this.sortedSongs.length}}
-  <div class="mb-8">
+  <div class="mb-8 flex">
     <span class="relative z-0 inline-flex shadow-sm">
-      <button
-        type="button"
+      <LinkTo
         class="rounded-1-md inline-flex items-center px-4 py-2 border border-gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-white hover:bg-purple-500"
         data-test-rr="sort-by-title-asc"
-        {{on "click" (set this.sortBy "title")}}
+        @query={{hash s="title"}}
         >
         Title
         <FaIcon
@@ -13,12 +12,11 @@
         @icon="angle-up"
         @prefix="fas"
         />
-      </button>
-        <button
-          type="button"
+      </LinkTo>
+      <LinkTo
           class="-m1-px inline-flex items-center px-4 py-2 border border-gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-white hover:bg-purple-500"
           data-test-rr="sort-by-title-desc"
-          {{on "click" (set this.sortBy "-title")}}
+          @query={{hash s="-title"}}
           >
         Title
         <FaIcon
@@ -26,34 +24,48 @@
         @icon="angle-down"
         @prefix="fas"
         />
-        </button>
-        <button
+      </LinkTo>
+      <LinkTo
           type="button"
           class="-m1-px inline-flex items-center px-4 py-2 border border-gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-white hover:bg-purple-500"
           data-test-rr="sort-by-rating-asc"
-          {{on "click" (set this.sortBy "rating")}}
-          >
+          @query={{hash s="rating"}}
+        >
         Rating
         <FaIcon
         class="ml-2"
         @icon="angle-up"
         @prefix="fas"
         />
-        </button>
-        <button
-          type="button"
+      </LinkTo>
+      <LinkTo
           class="-m1-px inline-flex items-center px-4 py-2 border border-gray-500 bg-purple-600 leading-5 font-medium text-gray-100 hover:text-white hover:bg-purple-500"
           data-test-rr="sort-by-rating-desc"
-          {{on "click" (set this.sortBy "-rating")}}
-          >
+          @query={{hash s="-rating"}}
+        >
         Rating
         <FaIcon
         class="ml-2"
         @icon="angle-down"
         @prefix="fas"
         />
-        </button>
+      </LinkTo>
     </span>
+    <div class="relative ml-auto rounded-md shadow-sm">
+      <input
+        class="border rounded-md py-2 px-3 block w-full pr-10 text-gray-800 sm:text-sm sm:leading-5"
+        data-test-rr="search-box"
+        value={{this.searchTerm}}
+        {{on "input" this.updateSearchTerm}}
+        />
+      <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+        <FaIcon
+        class="h-5 w-5 text-gray-400"
+        @icon="search"
+        @prefix="fas"
+        />
+      </div>
+    </div>
   </div>
   <ul>
     {{#each this.sortedSongs as |song|}}
